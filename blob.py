@@ -1,9 +1,11 @@
 import numpy as np
 
 class Blob:
-    def __init__(self, size):
-        self.x = np.random.randint(0, size)
-        self.y = np.random.randint(0, size)
+    def __init__(self, R, size):
+        self.x = R.randint(0, size)
+        self.y = R.randint(0, size)
+        self.pos = (self.x, self.y)
+        self.R = R
         self.size = size
 
     def __str__(self):
@@ -49,6 +51,13 @@ class Blob:
         elif self.y > self.size-1:
             self.y = self.size-1
 
+        self.pos = (self.x, self.y)
+
     def get_vertices(self, scale):
         x, y = self.x * scale, self.y * scale
         return [(x, y), (x+scale, y), (x+scale, y+scale), (x, y+scale)]
+
+    def reset(self):
+        self.x = self.R.randint(0, self.size)
+        self.y = self.R.randint(0, self.size)
+        self.pos = (self.x, self.y)
