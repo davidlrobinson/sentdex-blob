@@ -1,19 +1,13 @@
 import numpy as np
 
 class Blob:
-    def __init__(self, R, size):
-        self.x = R.randint(0, size)
-        self.y = R.randint(0, size)
-        self.pos = (self.x, self.y)
-        self.R = R
+    def __init__(self, np_random, size):
+        self.np_random = np_random
         self.size = size
-
-    def __str__(self):
-        return f"{self.x}, {self.y}"
-
-    def __sub__(self, other):
-        return (self.x-other.x, self.y-other.y)
-
+        self.x = self.np_random.randint(0, size)
+        self.y = self.np_random.randint(0, size)
+        self.pos = (self.x, self.y)
+    
     def action(self, choice):
         '''
         Gives us 4 total movement options. (0,1,2,3)
@@ -29,19 +23,19 @@ class Blob:
 
     def move(self, x=False, y=False):
 
-        # If no value for x, move randomly
+        # if no value for x, move randomly
         if not x:
-            self.x += np.random.randint(-1, 2)
+            self.x += self.np_random.randint(-1, 2)
         else:
             self.x += x
 
-        # If no value for y, move randomly
+        # if no value for y, move randomly
         if not y:
-            self.y += np.random.randint(-1, 2)
+            self.y += self.np_random.randint(-1, 2)
         else:
             self.y += y
 
-        # If we are out of bounds, fix!
+        # if we are out of bounds, fix
         if self.x < 0:
             self.x = 0
         elif self.x > self.size-1:
@@ -54,6 +48,6 @@ class Blob:
         self.pos = (self.x, self.y)
 
     def reset(self):
-        self.x = self.R.randint(0, self.size)
-        self.y = self.R.randint(0, self.size)
+        self.x = self.np_random.randint(0, self.size)
+        self.y = self.np_random.randint(0, self.size)
         self.pos = (self.x, self.y)

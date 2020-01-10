@@ -15,13 +15,6 @@ ENEMY_REWARD = -300
 FOOD_REWARD = 25
 SHOW_EVERY = 1
 
-# B_DICT = {
-#     0: "empty",
-#     1: "player",
-#     2: "food",
-#     3: "enemy"
-# }
-
 class BlobEnv(gym.Env):
 
     def __init__(self, size):
