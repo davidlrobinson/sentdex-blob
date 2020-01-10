@@ -53,10 +53,6 @@ class Blob:
 
         self.pos = (self.x, self.y)
 
-    def get_vertices(self, scale):
-        x, y = self.x * scale, self.y * scale
-        return [(x, y), (x+scale, y), (x+scale, y+scale), (x, y+scale)]
-
     def reset(self):
         self.x = self.R.randint(0, self.size)
         self.y = self.R.randint(0, self.size)

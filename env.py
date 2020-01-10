@@ -9,7 +9,7 @@ from blob import Blob
 
 SIZE = 10
 
-N_EPISODES = 5
+N_EPISODES = 10
 MOVE_REWARD = -1
 ENEMY_REWARD = -300
 FOOD_REWARD = 25
@@ -59,7 +59,6 @@ class BlobEnv(gym.Env):
         return self.state, reward, done, {}
 
     def reset(self):
-        # self.state = self.np_random.randint(low=0, high=self.world_size, size=(3, 2))
         self.player.reset(), self.food.reset(), self.enemy.reset()
         self.state = np.array([self.player.pos, self.food.pos, self.enemy.pos])
         return self.state
@@ -115,18 +114,3 @@ if __name__ == "__main__":
                 print("Episode {} finished after {} timesteps".format(i+1, t+1))
                 break
     env.close()
-    
-
-
-    # player = Blob(SIZE)
-    # food = Blob(SIZE)
-    # enemy = Blob(SIZE)
-
-    # img = np.zeros((SIZE, SIZE, 3), dtype=np.uint8)
-    # img[food.x][food.y] = (0, 255, 0)
-    # img[player.x][player.y] = (255, 0, 0)
-    # img[enemy.x][enemy.y] = (0, 0, 255)
-    # img = cv2.resize(img, (300, 300), interpolation=cv2.INTER_NEAREST)
-
-    # cv2.imshow("image", img)
-    # cv2.waitKey(0)
