@@ -1,53 +1,17 @@
 import numpy as np
 
 class Blob:
-    def __init__(self, np_random, size):
-        self.np_random = np_random
-        self.size = size
-        self.x = self.np_random.randint(0, size)
-        self.y = self.np_random.randint(0, size)
-        self.pos = (self.x, self.y)
-    
-    def action(self, choice):
-        '''
-        Gives us 4 total movement options. (0,1,2,3)
-        '''
-        if choice == 0:
-            self.move(x=1, y=1)
-        elif choice == 1:
-            self.move(x=-1, y=-1)
-        elif choice == 2:
-            self.move(x=-1, y=1)
-        elif choice == 3:
-            self.move(x=1, y=-1)
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
 
-    def move(self, x=False, y=False):
+    def move(self, x, y, bound):
+        self.x = np.clip(self.x + x, 0, bound - 1)
+        self.y = np.clip(self.y + y, 0, bound - 1)
 
-        # if no value for x, move randomly
-        if not x:
-            self.x += self.np_random.randint(-1, 2)
-        else:
-            self.x += x
+    @property
+    def pos(self):
+        return (self.x, self.y)
 
-        # if no value for y, move randomly
-        if not y:
-            self.y += self.np_random.randint(-1, 2)
-        else:
-            self.y += y
-
-        # if we are out of bounds, fix
-        if self.x < 0:
-            self.x = 0
-        elif self.x > self.size-1:
-            self.x = self.size-1
-        if self.y < 0:
-            self.y = 0
-        elif self.y > self.size-1:
-            self.y = self.size-1
-
-        self.pos = (self.x, self.y)
-
-    def reset(self):
-        self.x = self.np_random.randint(0, self.size)
-        self.y = self.np_random.randint(0, self.size)
-        self.pos = (self.x, self.y)
+    def __repr__(self):
+        return f'{self.__class__.__name__!r}(x={self.x!r}, y={self.y!r})'

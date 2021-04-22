@@ -9,7 +9,7 @@ from blob import Blob
 
 SIZE = 10
 
-N_EPISODES = 10
+N_EPISODES = 5
 MOVE_REWARD = -1
 ENEMY_REWARD = -300
 FOOD_REWARD = 25
@@ -20,23 +20,38 @@ class BlobEnv(gym.Env):
     def __init__(self, size):
         self.seed()
 
-        self.world_size = size
-        self.player = Blob(self.np_random, size)
-        self.food = Blob(self.np_random, size)
-        self.enemy = Blob(self.np_random, size)
-        
+        self.size = size
+        self.reset()
         self.viewer = None
 
-        self.action_space = spaces.Discrete(4)
-        self.observation_space = spaces.Box(low=0, high=size-1, shape=(3, 2), dtype=np.int)
+        self.action_space = spaces.Discrete(9) # 8 principle winds and no movement
+        self.observation_space = spaces.Box(low=0, high=size-1, shape=(3, 2), dtype=int) # x and y coords of player, food, and enemy
 
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
 
     def step(self, action):
-        self.player.action(action)
-        self.enemy.move()
+        if action == 0: 
+            self.player.move(x=0, y=0, bound=self.size)   # no movement
+        elif action == 1: 
+            self.player.move(x=0, y=1, bound=self.size)   # up
+        elif action == 2:
+            self.player.move(x=1, y=1, bound=self.size)   # up-right
+        elif action == 3:
+            self.player.move(x=1, y=0, bound=self.size)   # right
+        elif action == 4:
+            self.player.move(x=1, y=-1, bound=self.size)  # down-right
+        elif action == 5:
+            self.player.move(x=0, y=-1, bound=self.size)  # down
+        elif action == 6:
+            self.player.move(x=-1, y=-1, bound=self.size) # down-left
+        elif action == 7:
+            self.player.move(x=-1, y=0, bound=self.size)  # left
+        elif action == 8:
+            self.player.move(x=-1, y=1, bound=self.size)  # up-left
+
+        self.enemy.move(*self.np_random.randint(-1, 2, (2,)), bound=self.size)
         
         self.state = np.array([self.player.pos, self.food.pos, self.enemy.pos])
         if self.player.pos == self.enemy.pos:
@@ -52,14 +67,16 @@ class BlobEnv(gym.Env):
         return self.state, reward, done, {}
 
     def reset(self):
-        self.player.reset(), self.food.reset(), self.enemy.reset()
+        self.player = Blob(*self.np_random.randint(0, self.size, (2,), dtype=int))
+        self.food = Blob(*self.np_random.randint(0, self.size, (2,), dtype=int))
+        self.enemy = Blob(*self.np_random.randint(0, self.size, (2,), dtype=int))
         self.state = np.array([self.player.pos, self.food.pos, self.enemy.pos])
         return self.state
 
     def render(self, mode='human'):
         screen_size = 300
-        world_size = self.world_size
-        scale = screen_size // world_size
+        size = self.size
+        scale = screen_size // size
         blob_vertices = [(0, 0), (0, scale), (scale, scale), (scale, 0)]
 
         if self.viewer is None:
