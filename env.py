@@ -33,25 +33,26 @@ class BlobEnv(gym.Env):
 
     def step(self, action):
         if action == 0: 
-            self.player.move(x=0, y=0, bound=self.size)   # no movement
+            x, y = 0, 0     # no movement
         elif action == 1: 
-            self.player.move(x=0, y=1, bound=self.size)   # up
+            x, y = 0, 1     # up
         elif action == 2:
-            self.player.move(x=1, y=1, bound=self.size)   # up-right
+            x, y = 1, 1     # up-right
         elif action == 3:
-            self.player.move(x=1, y=0, bound=self.size)   # right
+            x, y = 1, 0     # right
         elif action == 4:
-            self.player.move(x=1, y=-1, bound=self.size)  # down-right
+            x, y = 1, -1    # down-right
         elif action == 5:
-            self.player.move(x=0, y=-1, bound=self.size)  # down
+            x, y = 0, -1    # down
         elif action == 6:
-            self.player.move(x=-1, y=-1, bound=self.size) # down-left
+            x, y = -1, -1   # down-left
         elif action == 7:
-            self.player.move(x=-1, y=0, bound=self.size)  # left
+            x, y = -1, 0    # left
         elif action == 8:
-            self.player.move(x=-1, y=1, bound=self.size)  # up-left
+            x, y = -1, 1    # up-left
 
-        self.enemy.move(*self.np_random.randint(-1, 2, (2,)), bound=self.size)
+        self.player.move(x, y, bound=self.size-1)
+        self.enemy.move(*self.np_random.randint(-1, 2, (2,)), bound=self.size-1)
         
         self.state = np.array([self.player.pos, self.food.pos, self.enemy.pos])
         if self.player.pos == self.enemy.pos:

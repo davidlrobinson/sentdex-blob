@@ -6,8 +6,8 @@ class Blob:
         self.y = y
 
     def move(self, x, y, bound):
-        self.x = np.clip(self.x + x, 0, bound - 1)
-        self.y = np.clip(self.y + y, 0, bound - 1)
+        self.x = np.clip(self.x + x, 0, bound)
+        self.y = np.clip(self.y + y, 0, bound)
 
     @property
     def pos(self):
